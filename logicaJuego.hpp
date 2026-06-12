@@ -1,0 +1,8 @@
+//
+// Created by Fran on 12/6/2026.
+//
+
+#ifndef ASASAS_LOGICAJUEGO_HPP
+#define ASASAS_LOGICAJUEGO_HPP
+
+#endif //ASASAS_LOGICAJUEGO_HPP
