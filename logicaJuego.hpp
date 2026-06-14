@@ -79,3 +79,80 @@ void generarCamino() {
 
     }
 }
+
+void seleccionarJugadores(Jugador &j1, Jugador &j2){
+	//verifica que exitan jugadores o esta vacio
+	FILE* archivo=fopen("datosJugadores.bin","rb");
+	if(archivo==NULL){
+		cout<<"--SIN JUGADORES--"<<endl;
+		return;
+	}
+	//cuenta los jugadores
+	fseek(archivo,0,SEEK_END);
+	int total=ftell(archivo)/sizeof(jugador);
+	fseek(archivo,0,SEEK_SET);
+	if (total<2){
+		cout<<"Se necesitan al menos 2 jugadores."<<endl;
+		fclose(archivo);
+		return;
+	}
+	//carga todos los arreglos temporal
+	Jugador lista[50];
+	int cant=0;
+	while (fread(&lista[cant],sizeof(Jugador),1,archivo)==1){
+		cant++;
+	}
+	fclose(archivo);
+	//mostrar lista
+	cout<<"---Seleccion de jugadores---"<<endl;
+	for(int i=0;i<cant;i++){
+		cout<<i+1<<". "<<lista[i].nickname<<" ("<<lista[i].categoria<<")"<<endl;
+	}
+	
+	int op1,op2;
+	
+	//seleccion jugador 1
+	do{
+		cout<<"\nSeleccione Jugador 1 (1-"<<cant<<"): ";
+		cin>>op1;
+		if(op1<1||op1>cant){
+			cout<<"Opcion incorrecta"<<endl;
+		}
+	}while(op1<1||op1>cant);
+	
+	//seleccion jugador 2-no puede ser el mismo
+	do{
+		cout<<"Selecione jugador 2 (1-"<<cant<<"): ";
+		cin>>op2;
+		if(op2<1||op2>cant){
+			cout<<"Opcion incorrecta"<<endl;
+		}else{
+			if (op2==op1){
+				cout<<"Error: un jugador no puede enfrentarse a si mismo."<<endl;
+			}
+		}
+	}while(op2<1||op2>cant||op2==op1);
+	
+	j1=lista[op1-1];
+	j2=lista[op2-1];
+	cout<<"\njugador 1: "<<j1.nickname<<endl;
+	cout<<"Jugador 2: "<<j2.nickname<<endl;
+	
+	//senior elige donde quiere
+	//si no es senior es aleatoriamente
+	int puntoPartida,quienInicia;
+	if(j1.categoria=='S'||j2.categoria=='S'){
+		Jugador &senior=(j1.categoria=='S')? j1:j2;
+		cout<<"\n"<<senior.nickname<<" es Senior. Elige:"<<endl;
+		cout<<"Punto de partida (0=izquierda, 1=derecha): ";
+		cin>>puntoPartida;
+		cout<<"Quien inicia (1="<<j1.nickname<<", 2="<<j2.nickname<<"): ";
+		cin>>quienInicia;
+	}else{
+		srand(time(NULL));
+		puntPartida=rand()%2;
+		quienInicia=rand()%2+1;
+		cout<<"\n Punto de partida asignado: "<<(puntoPartida==0 ? "Izquierda": "Derecha")<<endl;
+		cout<<"Inicia: "<<(quienInicia==1 ? j1.nickname:j2.nickname)<<endl;
+	}
+}
