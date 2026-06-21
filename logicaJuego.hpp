@@ -25,12 +25,14 @@ int fibonacci(int x) {
     }
 }
 
-void generarCamino() {
-    listaD camino;
+
+
+void generarCamino(listaD &camino, int &tamanio) {
+
     iniciarListaD(camino);
     srand(time(NULL));
     int orientacion = rand() % 2;
-    int tamaño = rand() % 21 + 30;
+    tamanio = rand() % 21 + 30;
 
 
     int random;
@@ -44,12 +46,13 @@ void generarCamino() {
 
     iniciarArbol(historial);
     if (orientacion == 0) {
-        for (int x=0; x<tamaño; x++) {
+    	cout<<"+-+ CAMINO IZQ - DER +-+"<<endl;
+        for (int x=0; x<tamanio; x++) {
 
             if (cantFibo !=cantInser) {
                 do {
                     random = rand() % 4999 + 1;
-                }while (valorRepetido(random));
+                }while (valorRepetido(historial,random));
 
                 insertarFinal(camino,random,x,true);
                 cantInser++;
@@ -60,12 +63,13 @@ void generarCamino() {
             }
         }
     }else {
-        for (int x=tamaño-1; x>=0; x--) {
+    	cout<<"+-+ CAMINO DER - IZQ +-+"<<endl;
+        for (int x=tamanio-1; x>=0; x--) {
 
             if (cantFibo !=cantInser) {
                 do {
                     random = rand() % 4999 + 1;
-                }while (valorRepetido(random));
+                }while (valorRepetido(historial,random));
 
                 insertarInicio(camino,random,x,true);
                 cantInser++;
@@ -78,7 +82,15 @@ void generarCamino() {
         }
 
     }
+
+	cout<<"+-+ CAMINO GENERADO +-+"<<endl;
+	cout<<"+-+ TAMAÑO: "<<tamanio<<endl;
+
 }
+
+
+
+
 
 void seleccionarJugadores(Jugador &j1, Jugador &j2){
 	//verifica que exitan jugadores o esta vacio
@@ -89,7 +101,7 @@ void seleccionarJugadores(Jugador &j1, Jugador &j2){
 	}
 	//cuenta los jugadores
 	fseek(archivo,0,SEEK_END);
-	int total=ftell(archivo)/sizeof(jugador);
+	int total=ftell(archivo)/sizeof(Jugador);
 	fseek(archivo,0,SEEK_SET);
 	if (total<2){
 		cout<<"Se necesitan al menos 2 jugadores."<<endl;
@@ -150,7 +162,7 @@ void seleccionarJugadores(Jugador &j1, Jugador &j2){
 		cin>>quienInicia;
 	}else{
 		srand(time(NULL));
-		puntPartida=rand()%2;
+		puntoPartida=rand()%2;
 		quienInicia=rand()%2+1;
 		cout<<"\n Punto de partida asignado: "<<(puntoPartida==0 ? "Izquierda": "Derecha")<<endl;
 		cout<<"Inicia: "<<(quienInicia==1 ? j1.nickname:j2.nickname)<<endl;

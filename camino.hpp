@@ -3,7 +3,7 @@
 using namespace std;
 
 
-struct nodo {
+struct nodoLD {
     int valor;
     bool valid=0;
     int nro;
@@ -12,7 +12,7 @@ struct nodo {
 };
 
 
-typedef nodo *tNodoD;
+typedef nodoLD* tNodoD;
 
 struct listaD {
     tNodoD inicio;
@@ -28,7 +28,7 @@ void iniciarListaD(listaD &l) {
 bool isEmpty(listaD &l) {}
 
 void insertarFinal(listaD &l, int valor, int nro, bool valido) {
-    tNodoD p= new nodo;
+    tNodoD p= new nodoLD;
     p->valor = valor;
     p->nro = nro;
     p->valid= valido;
@@ -50,7 +50,7 @@ void insertarFinal(listaD &l, int valor, int nro, bool valido) {
 }
 
 void insertarInicio(listaD &l, int valor, int nro, bool valido) {
-    tNodoD p = new nodo;
+    tNodoD p = new nodoLD;
     p->valor = valor;
     p->nro = nro;
     p->valid= valido;
@@ -72,18 +72,31 @@ void insertarInicio(listaD &l, int valor, int nro, bool valido) {
 
 }
 
-tNodoD consultarNodo(listaD &l, int nro) {
+int consultarNodo(listaD &l, int nro) {
     tNodoD p = l.inicio;
 
 
     while (p!=NULL) {
         if (p->nro == nro) {
-            return p;
+            return p->valor;
         }
         p = p->sig;
     }
     cout<<"-- ERROR NODO NO ENCONTRADO -- "<<endl;
-    return NULL;
+    return -1;
+}
+
+void mostrarCamino(listaD &l) {
+    if (l.inicio == NULL) {
+        cout << "--- LISTA VACIA ---" << endl;
+        return;
+    }
+    tNodoD p = l.inicio;
+    while (p!=NULL) {
+        cout<<"<-->|"<<p->valor<<"|<---> ";
+        p = p->sig;
+    }
+    cout<<endl;
 }
 
 void destruirCamino(listaD &l) {

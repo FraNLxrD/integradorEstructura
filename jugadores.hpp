@@ -35,8 +35,8 @@ void agregarJugador(Jugador j) {
 }
 
 
-void cargaJugador(Jugador J) {
-
+void cargaJugador() {
+    Jugador J;
     cout<<"======= CARGA DE JUGADOR ========"<<endl;
     do {
         cout<<"Nombre: "; cin>>J.nombre;
@@ -102,8 +102,10 @@ void mostrarJugadores() {
         fseek(archivo,0,SEEK_END);
         if (ftell(archivo)==0) {
             cout<<"--- SIN JUGADORES ---"<<endl;
+            fclose(archivo);
+            return;
         }
-
+        rewind(archivo);
         Jugador t;
 
         cout<<"==== JUGADORES REGISTRADOS ====\n"<<endl;
@@ -114,6 +116,34 @@ void mostrarJugadores() {
             cout<<"CATEGORIA: "<<t.categoria<<endl;
             cout<<endl;
         }
+        fclose(archivo);
+    }else {
+        cout<<"-- ERROR: ARCHIVO -- "<<endl;
+    }
+
+}
+
+int cantidadDeJugadores() {
+    FILE* archivo = fopen("datosJugadores.bin","rb");
+
+    if (archivo!=NULL) {
+
+        fseek(archivo,0,SEEK_END);
+        if (ftell(archivo)==0) {
+            fclose(archivo);
+            return 0;
+        }
+        rewind(archivo);
+        Jugador t;
+        int contador=0;
+
+        while (fread(&t,sizeof(Jugador),1,archivo)==1) {
+            contador++;
+        }
+        fclose(archivo);
+        return contador;
+    }else {
+        return -1;
     }
 }
 
