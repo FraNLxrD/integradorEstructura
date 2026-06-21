@@ -2,33 +2,25 @@
 
 using namespace std;
 
-;
-struct nodo {
+
+struct nodoP {
     int valor;
     nodo* abajo;
 };
 
-typedef nodo* tope;
+typedef nodoP* tope;
 
 void inicializarPila(tope &p) {
     p=NULL;
 }
 
-void iniciarAvance(tope &p, bool der, int tam) {
-    p->abajo= NULL;
-    if (der) {
-        p->valor= tam;
-    }else {
-        p->valor= 0;
-    }
-}
 
 bool pilaVacia(tope &p) {
     return p == NULL;
 }
 
 void cargarPila(tope &p, int ingr) {
-    tope q= new nodo;
+    tope q= new nodoP;
     q->valor = ingr;
     if (pilaVacia(p)) {
         q->abajo= NULL;
