@@ -7,8 +7,8 @@ struct nodoLD {
     int valor;
     bool valid=0;
     int nro;
-    nodo *ant;
-    nodo *sig;
+    nodoLD *ant;
+    nodoLD *sig;
 };
 
 
@@ -25,7 +25,7 @@ void iniciarListaD(listaD &l) {
     l.ultimo = NULL;
 };
 
-bool isEmpty(listaD &l) {}
+bool isEmpty(listaD &l) {return l.inicio == NULL; }
 
 void insertarFinal(listaD &l, int valor, int nro, bool valido) {
     tNodoD p= new nodoLD;
@@ -41,7 +41,7 @@ void insertarFinal(listaD &l, int valor, int nro, bool valido) {
     }
 
     p->sig= NULL;
-    p->ant= l.ultimo;
+    p->ant = l.ultimo;
 
     l.ultimo->sig = p;
     l.ultimo = p;

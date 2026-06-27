@@ -5,7 +5,7 @@ using namespace std;
 
 struct nodoP {
     int valor;
-    nodo* abajo;
+    nodoP* abajo;
 };
 
 typedef nodoP* tope;
