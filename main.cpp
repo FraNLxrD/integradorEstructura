@@ -224,6 +224,8 @@ void juego(Jugador &j1, Jugador &j2,tope &av1,tope &av2,int tamanio, listaD &cam
     int posActual1,posActual2;
     bool end=false;
     while (!end) {
+
+        //ESTO ES SOLO CUANDO INICIA 1
         if (quienInicia==1) {
             int teclado;
 
