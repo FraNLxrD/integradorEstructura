@@ -149,61 +149,44 @@ void seleccionarJugadores(Jugador &j1, Jugador &j2){
 	j2=lista[op2-1];
 	cout<<"\njugador 1: "<<j1.nickname<<endl;
 	cout<<"Jugador 2: "<<j2.nickname<<endl;
-	
-	//senior elige donde quiere
-	//si no es senior es aleatoriamente
-	int puntoPartida,quienInicia;
-	if(j1.categoria=='S'||j2.categoria=='S'){
-		Jugador &senior=(j1.categoria=='S')? j1:j2;
-		cout<<"\n"<<senior.nickname<<" es Senior. Elige:"<<endl;
-		cout<<"Punto de partida (0=izquierda, 1=derecha): ";
-		cin>>puntoPartida;
-		cout<<"Quien inicia (1="<<j1.nickname<<", 2="<<j2.nickname<<"): ";
-		cin>>quienInicia;
-	}else{
-		srand(time(NULL));
-		puntoPartida=rand()%2;
-		quienInicia=rand()%2+1;
-		cout<<"\n Punto de partida asignado: "<<(puntoPartida==0 ? "Izquierda": "Derecha")<<endl;
-		cout<<"Inicia: "<<(quienInicia==1 ? j1.nickname:j2.nickname)<<endl;
-	}
+
 }
 // Pre: recibe un numero y el ultimo numero visitado
 // Post: retorna el tipo: 0=comun, 1=primo, 2=amigo, 3=capicua, 4=perfecto
+bool esCapicua(int n) {
+	int original = n, invertido = 0;
+	while (n > 0) {
+		invertido = invertido * 10 + n % 10;
+		n /= 10;
+	}
+	return original == invertido;
+}
+
+bool esPrimo(int n) {
+	if (n < 2) return false;
+	for (int i = 2; i * i <= n; i++)
+		if (n % i == 0) return false;
+	return true;
+}
+
+bool esPerfecto(int n) {
+	int suma = 0;
+	for (int i = 1; i < n; i++)
+		if (n % i == 0) suma += i;
+	return suma == n;
+}
+
+bool esAmigo(int a, int b) {
+	// dos numeros son amigos si la suma de divisores de a = b y viceversa
+	int sumaA = 0, sumaB = 0;
+	for (int i = 1; i < a; i++) if (a % i == 0) sumaA += i;
+	for (int i = 1; i < b; i++) if (b % i == 0) sumaB += i;
+	return sumaA == b && sumaB == a;
+}
 int controlNumero(int num, int ultimoVisitado) {
     if (esPrimo(num))    return 1;
     if (esAmigo(num, ultimoVisitado)) return 2;
     if (esCapicua(num))  return 3;
     if (esPerfecto(num)) return 4;
     return 0;
-}
-bool esCapicua(int n) {
-    int original = n, invertido = 0;
-    while (n > 0) {
-        invertido = invertido * 10 + n % 10;
-        n /= 10;
-    }
-    return original == invertido;
-}
-
-bool esPrimo(int n) {
-    if (n < 2) return false;
-    for (int i = 2; i * i <= n; i++)
-        if (n % i == 0) return false;
-    return true;
-}
-
-bool esPerfecto(int n) {
-    int suma = 0;
-    for (int i = 1; i < n; i++)
-        if (n % i == 0) suma += i;
-    return suma == n;
-}
-
-bool esAmigo(int a, int b) {
-    // dos numeros son amigos si la suma de divisores de a = b y viceversa
-    int sumaA = 0, sumaB = 0;
-    for (int i = 1; i < a; i++) if (a % i == 0) sumaA += i;
-    for (int i = 1; i < b; i++) if (b % i == 0) sumaB += i;
-    return sumaA == b && sumaB == a;
 }
