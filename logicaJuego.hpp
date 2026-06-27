@@ -149,22 +149,5 @@ void seleccionarJugadores(Jugador &j1, Jugador &j2){
 	j2=lista[op2-1];
 	cout<<"\njugador 1: "<<j1.nickname<<endl;
 	cout<<"Jugador 2: "<<j2.nickname<<endl;
-	
-	//senior elige donde quiere
-	//si no es senior es aleatoriamente
-	int puntoPartida,quienInicia;
-	if(j1.categoria=='S'||j2.categoria=='S'){
-		Jugador &senior=(j1.categoria=='S')? j1:j2;
-		cout<<"\n"<<senior.nickname<<" es Senior. Elige:"<<endl;
-		cout<<"Punto de partida (0=izquierda, 1=derecha): ";
-		cin>>puntoPartida;
-		cout<<"Quien inicia (1="<<j1.nickname<<", 2="<<j2.nickname<<"): ";
-		cin>>quienInicia;
-	}else{
-		srand(time(NULL));
-		puntoPartida=rand()%2;
-		quienInicia=rand()%2+1;
-		cout<<"\n Punto de partida asignado: "<<(puntoPartida==0 ? "Izquierda": "Derecha")<<endl;
-		cout<<"Inicia: "<<(quienInicia==1 ? j1.nickname:j2.nickname)<<endl;
-	}
+
 }
