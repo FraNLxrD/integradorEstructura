@@ -120,10 +120,7 @@ void juego(Jugador &j1, Jugador &j2,tope &av1,tope &av2,int tamanio, listaD &cam
             for (int x=0;x<dado;x++) {
                 cargarPila(av1, av1->valor-1);
             }
-
             cout<<"CASILLA n°"<<av1->valor<<" = "<<consultarNodo(camino,av1->valor)<<endl;
-            
-
         }
     }
 
