@@ -3,7 +3,7 @@
 #include "jugadores.hpp"
 #include "abb.hpp"
 #include "camino.hpp"
-#include "pilaAvance.hpp"
+
 
 
 using namespace std;
@@ -100,10 +100,8 @@ void seleccionarJugadores(Jugador &j1, Jugador &j2){
 		return;
 	}
 	//cuenta los jugadores
-	fseek(archivo,0,SEEK_END);
-	int total=ftell(archivo)/sizeof(Jugador);
-	fseek(archivo,0,SEEK_SET);
-	if (total<2){
+
+	if (cantidadDeJugadores()<2){
 		cout<<"Se necesitan al menos 2 jugadores."<<endl;
 		fclose(archivo);
 		return;

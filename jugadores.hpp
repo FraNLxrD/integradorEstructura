@@ -11,6 +11,7 @@ struct Jugador {
     char nickname[30];
     int puntaje;
     char categoria;
+    int racha;
 };
 
 
@@ -53,7 +54,7 @@ void cargaJugador() {
 
     J.categoria='J';
     J.puntaje=0;
-
+    J.racha=0;
     agregarJugador(J);
 }
 
@@ -69,17 +70,17 @@ void inicializarDefecto() {
     }
 
     //CARGA JUGADOR 1 (POR DEFECTO)
-    Jugador j1={"CARLOS","GARCIA","charlySNM",0,'S'};
+    Jugador j1={"CARLOS","GARCIA","charlySNM",0,'S',0};
 
 
     //CARGA JUGADOR 2 (POR DEFECTO)
-    Jugador j2={"CHIZZO","NAPOLI","fabianStone67",0,'S'};
+    Jugador j2={"CHIZZO","NAPOLI","fabianStone67",0,'S',0};
 
     //CARGA JUGADOR 3 (POR DEFECTO)
-    Jugador j3={"OSCAR","MORO","elBata",0,'J'};
+    Jugador j3={"OSCAR","MORO","elBata",0,'J',0};
 
     //CARGA JUGADOR 4 (POR DEFECTO)
-    Jugador j4={"FABIANA","CANTILO","losTwist",0,'J'};
+    Jugador j4={"FABIANA","CANTILO","losTwist",0,'J',0};
 
 
     fwrite(&j1,sizeof(Jugador),1,archivo);
@@ -114,6 +115,7 @@ void mostrarJugadores() {
             cout<<"APELLIDO: "<<t.apellido<<endl;
             cout<<"NICKNAME: "<<t.nickname<<endl;
             cout<<"CATEGORIA: "<<t.categoria<<endl;
+            cout<<"PUNTAJE: "<<t.puntaje<<endl;
             cout<<endl;
         }
         fclose(archivo);
