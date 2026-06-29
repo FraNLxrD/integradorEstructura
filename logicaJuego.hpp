@@ -4,88 +4,69 @@
 #include "abb.hpp"
 #include "camino.hpp"
 
-
-
 using namespace std;
 
+// genera los numeros fibonasi (1, 2, 3, 5, 8)
 int fibonacci(int x) {
-    switch (x) {
-        case 1:
-            return 2;
-        case 2:
-            return 3;
-        case 3:
-            return 5;
-        case 5:
-            return 8;
-        case 8:
-            return 1;
-        default:
-            return 1;
-    }
+    if (x <= 0) return 0; // por si acaso
+    if (x == 1) return 1;
+    if (x == 2) return 2;
+    return fibonacci(x-1) + fibonacci(x-2);
 }
 
-
-
-void generarCamino(listaD &camino, int &tamanio) {
-
+// crea el minado del camino re loco q pide el profe
+void generarCamino(listaD &camino) {
     iniciarListaD(camino);
     srand(time(NULL));
-    int orientacion = rand() % 2;
-    tamanio = rand() % 21 + 30;
-
-
-    int random;
     raiz historial;
-
-    //asignacion random
-
-    int cantFibo=0;
-    int cantInser=0;
-
+    camino.tamanio = rand() % 21 + 30;
+    int random, cantInser = 0, orientacion = rand() % 2;
+    int fIndex = 1;
 
     iniciarArbol(historial);
+
     if (orientacion == 0) {
-    	cout<<"+-+ CAMINO IZQ - DER +-+"<<endl;
-        for (int x=0; x<tamanio; x++) {
-
-            if (cantFibo !=cantInser) {
+        cout<<"+-+ CAMINO IZQ - DER +-+"<<endl;
+        for (int x=0; x<camino.tamanio; x++) {
+            if (x == 0 || x == camino.tamanio-1) {
+                insertarFinal(camino, 0, x, false);
+            } else if (cantInser < fibonacci(fIndex)) {
                 do {
                     random = rand() % 4999 + 1;
-                }while (valorRepetido(historial,random));
-
-                insertarFinal(camino,random,x,true);
+                } while (valorRepetido(historial, random));
+                insertarFinal(camino, random, x, true);
+                cargarArbol(historial, random);
                 cantInser++;
-            }else {
-                cantInser=0;
-                cantFibo=fibonacci(cantFibo);
-                insertarFinal(camino,0,x,false);
+            } else {
+                insertarFinal(camino, 0, x, false);
+                cantInser = 0;
+                fIndex++;
+                if (fIndex > 5) fIndex = 1;
             }
         }
-    }else {
-    	cout<<"+-+ CAMINO DER - IZQ +-+"<<endl;
-        for (int x=tamanio-1; x>=0; x--) {
-
-            if (cantFibo !=cantInser) {
+    } else {
+        cout<<"+-+ CAMINO DER - IZQ +-+"<<endl;
+        for (int x=camino.tamanio-1; x>=0; x--) {
+            if (x == 0 || x == camino.tamanio-1) {
+                insertarInicio(camino, 0, x, false);
+            } else if (cantInser < fibonacci(fIndex)) {
                 do {
                     random = rand() % 4999 + 1;
-                }while (valorRepetido(historial,random));
-
-                insertarInicio(camino,random,x,true);
+                } while (valorRepetido(historial, random));
+                insertarInicio(camino, random, x, true);
+                cargarArbol(historial, random);
                 cantInser++;
-            }else {
-                cantInser=0;
-                cantFibo=fibonacci(cantFibo);
-                insertarInicio(camino,0,x,false);
+            } else {
+                insertarInicio(camino, 0, x, false);
+                cantInser = 0;
+                fIndex++;
+                if (fIndex > 5) fIndex = 1;
             }
-
         }
-
     }
 
-	cout<<"+-+ CAMINO GENERADO +-+"<<endl;
-	cout<<"+-+ TAMAÑO: "<<tamanio<<endl;
-
+    cout<<"+-+ CAMINO GENERADO +-+"<<endl;
+    cout<<"+-+ tamanio: "<<camino.tamanio<<endl;
 }
 
 
@@ -94,7 +75,7 @@ void generarCamino(listaD &camino, int &tamanio) {
 
 void seleccionarJugadores(Jugador &j1, Jugador &j2){
 	//verifica que exitan jugadores o esta vacio
-	FILE* archivo=fopen("datosJugadores.bin","rb");
+	FILE* archivo=fopen("datosJugadores.dat","rb");
 	if(archivo==NULL){
 		cout<<"--SIN JUGADORES--"<<endl;
 		return;
@@ -118,9 +99,9 @@ void seleccionarJugadores(Jugador &j1, Jugador &j2){
 	for(int i=0;i<cant;i++){
 		cout<<i+1<<". "<<lista[i].nickname<<" ("<<lista[i].categoria<<")"<<endl;
 	}
-	
+
 	int op1,op2;
-	
+
 	//seleccion jugador 1
 	do{
 		cout<<"\nSeleccione Jugador 1 (1-"<<cant<<"): ";
@@ -129,7 +110,7 @@ void seleccionarJugadores(Jugador &j1, Jugador &j2){
 			cout<<"Opcion incorrecta"<<endl;
 		}
 	}while(op1<1||op1>cant);
-	
+
 	//seleccion jugador 2-no puede ser el mismo
 	do{
 		cout<<"Selecione jugador 2 (1-"<<cant<<"): ";
@@ -142,7 +123,7 @@ void seleccionarJugadores(Jugador &j1, Jugador &j2){
 			}
 		}
 	}while(op2<1||op2>cant||op2==op1);
-	
+
 	j1=lista[op1-1];
 	j2=lista[op2-1];
 	cout<<"\njugador 1: "<<j1.nickname<<endl;
