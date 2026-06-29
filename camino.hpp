@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <time.h>
 using namespace std;
 
@@ -17,13 +18,15 @@ typedef nodoLD* tNodoD;
 struct listaD {
     tNodoD inicio;
     tNodoD ultimo;
+    int tamanio;
 };
 
 
 void iniciarListaD(listaD &l) {
     l.inicio = NULL;
     l.ultimo = NULL;
-};
+    l.tamanio = 0;
+}
 
 bool isEmpty(listaD &l) {return l.inicio == NULL; }
 
@@ -108,4 +111,66 @@ void destruirCamino(listaD &l) {
         delete aux;
     }
     iniciarListaD(l);
+}
+
+// Pre: recibe la lista y un numero de nodo
+// Post: retorna true si la baldosa tiene numero valido
+bool baldosaValida(listaD &l, int nro) {
+    tNodoD p = l.inicio;
+    while (p != NULL) {
+        if (p->nro == nro) return p->valid;
+        p = p->sig;
+    }
+    return false;
+}
+
+// Pre: recibe la lista y el tamano del camino
+// Post: muestra el camino visualmente en filas alternadas como un tablero
+void mostrarCaminoVisual(listaD &l, int tamano) {
+    tNodoD nodos[50];
+    int total = 0;
+    tNodoD aux = l.inicio;
+    while (aux != NULL) {
+        nodos[total++] = aux;
+        aux = aux->sig;
+    }
+
+    int filaSize = 10;
+    int fila = 0;
+    int i = 0;
+
+    while (i < total) {
+        int fin = i + filaSize - 1;
+        if (fin >= total) fin = total - 1;
+
+        // Separador superior
+        for (int k = i; k <= fin; k++) cout << "+----------";
+        cout << "+" << endl;
+
+        // Filas pares: izq a der / Filas impares: der a izq
+        if (fila % 2 == 0) {
+            for (int j = i; j <= fin; j++) {
+                if (nodos[j]->valid)
+                    cout << "|  " << left << setw(6) << nodos[j]->valor << "  ";
+                else
+                    cout << "|          ";
+            }
+        } else {
+            for (int j = fin; j >= i; j--) {
+                if (nodos[j]->valid)
+                    cout << "|  " << left << setw(6) << nodos[j]->valor << "  ";
+                else
+                    cout << "|          ";
+            }
+        }
+        cout << "|" << endl;
+
+        // Separador inferior
+        for (int k = i; k <= fin; k++) cout << "+----------";
+        cout << "+" << endl;
+        cout << endl;
+
+        i += filaSize;
+        fila++;
+    }
 }

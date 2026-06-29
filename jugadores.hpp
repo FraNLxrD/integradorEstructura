@@ -14,12 +14,10 @@ struct Jugador {
     int racha;
 };
 
-
 void agregarJugador(Jugador j) {
-    FILE* archivoLect = fopen("datosJugadores.bin","rb");
+    FILE* archivoLect = fopen("datosJugadores.dat","rb");
     if(archivoLect!=NULL) {
         Jugador t;
-
         while (fread(&t,sizeof(Jugador),1,archivoLect)==1) {
             if (strcmp(t.nickname, j.nickname) == 0) {
                 cout<<"--ERRROR: JUGADOR YA EXISTENTE"<<endl;
@@ -28,28 +26,23 @@ void agregarJugador(Jugador j) {
             }
         }
     }
-
-    FILE* archivo= fopen("datosJugadores.bin", "ab");
+    FILE* archivo= fopen("datosJugadores.dat", "ab");
     fwrite(&j, sizeof(Jugador), 1, archivo);
     cout<<"$ JUGADOR - "<<j.nickname<<" - CARGADO CON EXITO $"<<endl;
     fclose(archivo);
 }
 
-
 void cargaJugador() {
     Jugador J;
     cout<<"======= CARGA DE JUGADOR ========"<<endl;
     do {
-        cout<<"Nombre: "; cin>>J.nombre;
-        cout<<endl;
+        cout<<"\nNombre: "; cin>>J.nombre;
     }while(J.nombre[0]=='\0');
     do {
-        cout<<"Apellido: "; cin>>J.apellido;
-        cout<<endl;
+        cout<<"\nApellido: "; cin>>J.apellido;
     }while(J.apellido[0]=='\0');
     do {
-        cout<<"Nickname: "; cin>>J.nickname;
-        cout<<endl;
+        cout<<"\nNickname: "; cin>>J.nickname;
     }while(J.nickname[0]=='\0');
 
     J.categoria='J';
@@ -59,44 +52,24 @@ void cargaJugador() {
 }
 
 void inicializarDefecto() {
-
-
-
-    FILE* archivo = fopen("datosJugadores.bin","wb");
-
-    if (archivo!=NULL) {
-        fclose(archivo);
-        return;
-    }
-
     //CARGA JUGADOR 1 (POR DEFECTO)
     Jugador j1={"CARLOS","GARCIA","charlySNM",0,'S',0};
-
-
+    agregarJugador(j1);
     //CARGA JUGADOR 2 (POR DEFECTO)
     Jugador j2={"CHIZZO","NAPOLI","fabianStone67",0,'S',0};
-
+    agregarJugador(j2);
     //CARGA JUGADOR 3 (POR DEFECTO)
     Jugador j3={"OSCAR","MORO","elBata",0,'J',0};
-
+    agregarJugador(j3);
     //CARGA JUGADOR 4 (POR DEFECTO)
     Jugador j4={"FABIANA","CANTILO","losTwist",0,'J',0};
-
-
-    fwrite(&j1,sizeof(Jugador),1,archivo);
-    fwrite(&j2,sizeof(Jugador),1,archivo);
-    fwrite(&j3,sizeof(Jugador),1,archivo);
-    fwrite(&j4,sizeof(Jugador),1,archivo);
-
-    fclose(archivo);
+    agregarJugador(j4);
 
     cout<<"-- JUGADORES CREADOS POR DEFECTO --"<<endl;
-
 }
 
-
 void mostrarJugadores() {
-    FILE* archivo = fopen("datosJugadores.bin","rb");
+    FILE* archivo = fopen("datosJugadores.dat","rb");
 
     if (archivo!=NULL) {
 
@@ -126,26 +99,17 @@ void mostrarJugadores() {
 }
 
 int cantidadDeJugadores() {
-    FILE* archivo = fopen("datosJugadores.bin","rb");
+    FILE* archivo = fopen("datosJugadores.dat","rb");
 
     if (archivo!=NULL) {
-
-        fseek(archivo,0,SEEK_END);
-        if (ftell(archivo)==0) {
-            fclose(archivo);
-            return 0;
-        }
-        rewind(archivo);
         Jugador t;
         int contador=0;
-
-        while (fread(&t,sizeof(Jugador),1,archivo)==1) {
+        while (fread(&t,sizeof(Jugador),1,archivo)==1)
             contador++;
-        }
         fclose(archivo);
         return contador;
     }else {
-        return -1;
+        return 0;
     }
 }
 

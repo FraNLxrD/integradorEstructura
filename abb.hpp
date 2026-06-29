@@ -36,16 +36,14 @@ void cargarArbol(raiz &r, tipodato ingr) {
             }
             q=q->der;
         }
-
-        if (q->valor>p->valor) {
+        else if (q->valor>p->valor) {
             if (q->izq==NULL) {
                 q->izq=p;
                 return;
             }
             q=q->izq;
         }
-
-        if (q->valor=p->valor) {
+        else if (q->valor==p->valor) {
             delete p;
             return;
         }
@@ -59,11 +57,10 @@ bool valorRepetido(raiz &r, tipodato comp) {
         if (comp==p->valor) {
             return true;
         }
-
-        if (comp<p->valor) {
+        else if (comp<p->valor) {
             p=p->izq;
         }
-        if (comp>p->valor) {
+        else if (comp>p->valor) {
             p=p->der;
         }
     }
