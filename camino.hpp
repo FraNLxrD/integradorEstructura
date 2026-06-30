@@ -9,6 +9,7 @@
 #include <iostream>
 #include <iomanip>
 #include <time.h>
+#include "abb.hpp"
 using namespace std;
 
 /* Estructura de cada nodo (baldosa) del camino */
@@ -223,4 +224,81 @@ void mostrarCaminoVisual(listaD &l, int tamano) {
         i += filaSize;
         fila++;
     }
+}
+
+int fibonacci(int x) {
+    if (x <= 0) return 0;
+    if (x == 1) return 1;
+    if (x == 2) return 2;
+    return fibonacci(x - 1) + fibonacci(x - 2);
+}
+
+/*
+ * Pre:  Recibe una referencia a una listaD vacia (o previamente destruida).
+ * Post: Genera aleatoriamente el camino del juego con entre 30 y 50 baldosas.
+ *       La primera y ultima baldosa siempre estan vacias (valor 0).
+ *       Las demas baldosas alternan entre bloques de baldosas con valores unicos
+ *       (cuya cantidad sigue la secuencia de Fibonacci) y baldosas vacias.
+ *       Se utiliza un ABB para garantizar que no haya valores repetidos.
+ *       La orientacion del camino (izquierda-derecha o derecha-izquierda)
+ *       se elige aleatoriamente.
+ */
+void generarCamino(listaD &camino) {
+    iniciarListaD(camino);
+    srand(time(NULL));
+
+    raiz historial;
+    camino.tamanio = rand() % 21 + 30; // Tamanio entre 30 y 50
+    int random, cantInser = 0, orientacion = rand() % 2;
+    int fIndex = 1;
+
+    iniciarArbol(historial);
+
+    if (orientacion == 0) {
+        // Camino de izquierda a derecha
+        cout << "+-+ CAMINO IZQ - DER +-+" << endl;
+        for (int x = 0; x < camino.tamanio; x++) {
+            if (x == 0 || x == camino.tamanio - 1) {
+                // Extremos siempre vacios
+                insertarFinal(camino, 0, x, false);
+            } else if (cantInser < fibonacci(fIndex)) {
+                // Insertar baldosa con valor unico
+                do {
+                    random = rand() % 4999 + 1;
+                } while (valorRepetido(historial, random));
+                insertarFinal(camino, random, x, true);
+                cargarArbol(historial, random);
+                cantInser++;
+            } else {
+                // Baldosa vacia que separa los bloques
+                insertarFinal(camino, 0, x, false);
+                cantInser = 0;
+                fIndex++;
+                if (fIndex > 5) fIndex = 1; // Cicla entre los primeros 5 de Fibonacci
+            }
+        }
+    } else {
+        // Camino de derecha a izquierda
+        cout << "+-+ CAMINO DER - IZQ +-+" << endl;
+        for (int x = camino.tamanio - 1; x >= 0; x--) {
+            if (x == 0 || x == camino.tamanio - 1) {
+                insertarInicio(camino, 0, x, false);
+            } else if (cantInser < fibonacci(fIndex)) {
+                do {
+                    random = rand() % 4999 + 1;
+                } while (valorRepetido(historial, random));
+                insertarInicio(camino, random, x, true);
+                cargarArbol(historial, random);
+                cantInser++;
+            } else {
+                insertarInicio(camino, 0, x, false);
+                cantInser = 0;
+                fIndex++;
+                if (fIndex > 5) fIndex = 1;
+            }
+        }
+    }
+
+    cout << "+-+ CAMINO GENERADO +-+" << endl;
+    cout << "+-+ tamanio: " << camino.tamanio << endl;
 }
